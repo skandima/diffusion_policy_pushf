@@ -1,0 +1,64 @@
+# Remote training config for Push-F task
+# This file overrides training and dataloader settings to values suitable
+# for GPU-equipped remote machines. Use it by passing --config-name=train_diffusion_unet_hybrid_workspace and
+# task=pushf_image plus +@/path/to/this/file or by copying into your Hydra config dir.
+
+defaults:
+  - _self_
+  - task: pushf_image
+
+training:
+  # Target device on the remote machine (GPU)
+  device: "cuda:0"
+  seed: 42
+  num_epochs: 200
+  gradient_accumulate_every: 1
+  use_ema: True
+  # checkpoint/validation/sample frequency (in epochs)
+  rollout_every: 5
+  checkpoint_every: 10
+  val_every: 1
+  sample_every: 10
+  # safety overrides for long runs
+  max_train_steps: null
+  max_val_steps: null
+
+dataloader:
+  # Larger batch size for GPU; tune for VRAM
+  batch_size: 32
+  num_workers: 8
+  pin_memory: True
+  persistent_workers: True
+
+val_dataloader:
+  batch_size: 32
+  num_workers: 4
+  pin_memory: True
+  persistent_workers: True
+
+optimizer:
+  lr: 1e-4
+
+checkpoint:
+  save_last_ckpt: True
+  topk:
+    monitor_key: test_mean_score
+    mode: max
+    k: 5
+
+logging:
+  mode: online
+  project: diffusion_policy_pushf
+
+# Task-specific sensible defaults for longer training
+task:
+  env_runner:
+    n_train: 50
+    n_train_vis: 5
+    n_test: 20
+    n_test_vis: 5
+    max_steps: 300
+  dataset:
+    # keep existing relative path; remote user can override if dataset is elsewhere
+    zarr_path: data/pushf/pushf_replay.zarr
+    max_train_episodes: 1000
