@@ -36,4 +36,4 @@ Notes
 - If you want me to make this zip fully self-contained (include the minimal code), I can add that.
 
 Need help?
-- Paste any error output here and I'll help fix it.
+-- Paste any error output here and I'll help fix it.
