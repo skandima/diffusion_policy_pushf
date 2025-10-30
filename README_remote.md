@@ -33,7 +33,4 @@ python train.py +diffusion_policy/config/train_pushf_remote.yaml task=pushf_imag
 
 Notes
 - This bundle doesn't include the full `diffusion_policy/` package. If the trainer doesn't have the repo, ask them to clone https://github.com/skandima/diffusion_policy_pushf and checkout `pushf/remote`.
-- If you want me to make this zip fully self-contained (include the minimal code), I can add that.
 
-Need help?
--- Paste any error output here and I'll help fix it.
